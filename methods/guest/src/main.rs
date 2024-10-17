@@ -5,8 +5,8 @@ use serde::Deserialize;  // Import Deserialize to read structs
 // Declare struct to use as input of guest program from env which set at host side 
 struct Payload {
     times: u32 ,
-    x: u32,
-    y: u32,
+    x: u64,
+    y: u64,
 }
 
 fn main() {
@@ -18,7 +18,7 @@ fn main() {
     // println!("Guest side : {}", n) ;
 
     // getting result from fibonachi process 
-    let result : u32 = fibonachi_logic(payload.times, payload.x, payload.y) ;
+    let result : u64 = fibonachi_logic(payload.times, payload.x, payload.y) ;
     // Commiting result specific into env called journal
     env::commit(&result);
 }
@@ -27,7 +27,7 @@ fn main() {
 // x and y as starting value of fibonachi limited with n fibo is 100
 // we wanted to prove that any starting values can be fibonachi too maximum fibo times
 // this is the way we wanted to prove we know fibonachi
-fn fibonachi_logic(t : u32,mut  x : u32 ,mut  y : u32) -> u32  {
+fn fibonachi_logic(t : u32, mut  x : u64, mut  y : u64) -> u64  {
     if t == 0  { 
         return x ; 
     }else if  t == 1  { 
@@ -36,7 +36,7 @@ fn fibonachi_logic(t : u32,mut  x : u32 ,mut  y : u32) -> u32  {
     // Consider doing loop way to find fibonachi 
     else { 
         for _ in 2..=t { 
-            let z: u32  = x + y ; 
+            let z: u64  = x + y ; 
             x = y ;
             y = z  ;
         }

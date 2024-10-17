@@ -9,8 +9,8 @@ use serde::Serialize;
 #[derive(Serialize)] 
 struct Payload{
     times : u32,
-    x : u32, 
-    y : u32 
+    x : u64, 
+    y : u64 
 }
 
 fn main() {
@@ -22,8 +22,8 @@ fn main() {
 
     // Define variable for our program
     let payload= Payload { 
-        times : 50 , 
-        x : 1,
+        times : 15 , 
+        x : 0,
         y : 1,
     }; 
 
@@ -46,8 +46,8 @@ fn main() {
     // Journal is part of receipt & records data that guest want to communicated to host 
     // or we can say it's result from computation 
     // So we gona decode the result from computation 
-    let result : u32 = receipt.journal.decode().unwrap() ; 
-    println!("Result from fibonachi nunmber when having input x and y compute 100 times : {}",result) ; 
+    let result : u64 = receipt.journal.decode().unwrap() ; 
+    println!("Result from fibonachi nunmber when having input x and y compute 15 times : {}",result) ; 
     
     // After getting public input as result we can verify the proof 
     // Creating proof from receipt 
