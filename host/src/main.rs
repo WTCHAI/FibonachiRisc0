@@ -51,6 +51,8 @@ fn main() {
     
     // After getting public input as result we can verify the proof 
     // Creating proof from receipt 
+    // This process receipt is proof but this below verify 
+    // Is just verify the guesttID match to the guest program 
     receipt.verify(FIBONACCI_GUEST_ID).unwrap() ; 
 
     // The receipt was verified at the end of proving, but the below code is an
