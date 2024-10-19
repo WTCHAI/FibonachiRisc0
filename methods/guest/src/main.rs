@@ -20,6 +20,10 @@ fn main() {
         panic!("Incorrect starting Fibonacci y values!");
     }
     
+    if payload.binding_randomness == 0 {
+        panic!("Binding randomness is zero, which will cause a division by zero error.");
+    }
+
     // Proceed with the Fibonacci computation
     let modifier_x : u64 = payload.x % payload.binding_randomness ; 
     let modifier_y : u64 = payload.y % payload.binding_randomness ; 
