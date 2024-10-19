@@ -4,6 +4,10 @@ use methods::{
     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
 };
 use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo};
+
+use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
+use rand::Rng;  // Trait to generate random numbers
+
 // Declare struct payload & serde used for derive struct in rust guess ? 
 use serde::Serialize;
 #[derive(Serialize)] 
@@ -12,6 +16,7 @@ struct Payload{
     x : u64, 
     y : u64,
     correct_y : u64,
+    binding_randomness : u64,
 }
 
 fn main() {
@@ -20,20 +25,27 @@ fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
+
     // This is private input knowing only real prover 
     let private_inputy = 10 ; 
+
+    // randomness setup
+    let mut rng = OsRng;
+    let mut binding_randomness_values = rng.gen() ; 
+    
+    while binding_randomness_values < private_inputy || binding_randomness_values == 0 {
+        println!("Genreating random but got {} rerandom ",binding_randomness_values) ; 
+        binding_randomness_values = rng.gen() ;
+    }
 
     // Define variable for our program
     let payload= Payload { 
         times : 15 , 
-        x : 0,
-        // Testing random input y to generate proof 
-        y : 10,
+        x : 0, 
+        y : 10,         // Testing random input y to generate proof
         correct_y : private_inputy,
-
+        binding_randomness : binding_randomness_values,
     }; 
-
-
     
     // Creating env as environtment for our program 
     let env = ExecutorEnv::builder().write(&payload).unwrap().build().unwrap() ; 
@@ -56,7 +68,7 @@ fn main() {
     // So we gona decode the result from computation 
     let result : u64 = receipt.journal.decode().unwrap() ; 
     println!("Result from fibonachi nunmber when having input x and y compute 15 times : {}",result) ; 
-    
+
     // After getting public input as result we can verify the proof 
     // Creating proof from receipt 
     // This process receipt is proof but this below verify 

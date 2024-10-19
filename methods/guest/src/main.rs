@@ -3,11 +3,12 @@ use risc0_zkvm::guest::env;
 use serde::Deserialize;  // Import Deserialize to read structs
 #[derive(Deserialize)]
 // Declare struct to use as input of guest program from env which set at host side 
-struct Payload {
-    times: u32 ,
-    x: u64,
-    y: u64,
-    correct_y : u64
+struct Payload{
+    times : u32,
+    x : u64, 
+    y : u64,
+    correct_y : u64,
+    binding_randomness : u64,
 }
 
 fn main() {
@@ -18,11 +19,13 @@ fn main() {
     if  payload.y != payload.correct_y {
         panic!("Incorrect starting Fibonacci y values!");
     }
-
+    
     // Proceed with the Fibonacci computation
-
+    let modifier_x : u64 = payload.x % payload.binding_randomness ; 
+    let modifier_y : u64 = payload.y % payload.binding_randomness ; 
     // getting result from fibonachi process 
-    let result : u64 = fibonachi_logic(payload.times, payload.x, payload.y) ;
+    let result : u64 = fibonachi_logic(payload.times, modifier_x,modifier_y ) ;
+
     // Commiting result specific into env called journal
     env::commit(&result);
 }
