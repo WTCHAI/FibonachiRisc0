@@ -10,7 +10,8 @@ use serde::Serialize;
 struct Payload{
     times : u32,
     x : u64, 
-    y : u64 
+    y : u64,
+    correct_y : u64,
 }
 
 fn main() {
@@ -19,14 +20,21 @@ fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
+    // This is private input knowing only real prover 
+    let private_inputy = 10 ; 
 
     // Define variable for our program
     let payload= Payload { 
         times : 15 , 
         x : 0,
-        y : 1,
+        // Testing random input y to generate proof 
+        y : 10,
+        correct_y : private_inputy,
+
     }; 
 
+
+    
     // Creating env as environtment for our program 
     let env = ExecutorEnv::builder().write(&payload).unwrap().build().unwrap() ; 
     
@@ -52,7 +60,7 @@ fn main() {
     // After getting public input as result we can verify the proof 
     // Creating proof from receipt 
     // This process receipt is proof but this below verify 
-    // Is just verify the guesttID match to the guest program 
+    // Is just verify the guesttID match to the guest program
     receipt.verify(FIBONACCI_GUEST_ID).unwrap() ; 
 
     // The receipt was verified at the end of proving, but the below code is an

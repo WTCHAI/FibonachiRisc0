@@ -7,6 +7,7 @@ struct Payload {
     times: u32 ,
     x: u64,
     y: u64,
+    correct_y : u64
 }
 
 fn main() {
@@ -14,8 +15,11 @@ fn main() {
     let payload : Payload = env::read() ;     
     
     // Declare loop times which is 100 times
+    if  payload.y != payload.correct_y {
+        panic!("Incorrect starting Fibonacci y values!");
+    }
 
-    // println!("Guest side : {}", n) ;
+    // Proceed with the Fibonacci computation
 
     // getting result from fibonachi process 
     let result : u64 = fibonachi_logic(payload.times, payload.x, payload.y) ;
