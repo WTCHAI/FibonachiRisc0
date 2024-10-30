@@ -3,7 +3,7 @@
 use methods::{
     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
 };
-use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo};
+use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo , Receipt};
 
 use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
 use rand::Rng;  // Trait to generate random numbers
@@ -19,7 +19,7 @@ struct Payload{
     binding_randomness : u64,
 }
 
-fn main() {
+pub fn generating_receipt() -> Result<Receipt, Box<dyn std::error::Error>> {
     // Initialize tracing. In order to view logs, run `RUST_LOG=info cargo run`
     // donno this 
     tracing_subscriber::fmt()
@@ -57,26 +57,8 @@ fn main() {
     // Executable and Linkable Format refers to compiles WebAssembly (WASM) for guest program 
     // unwrap () is method in rust when the things that we wanted to use is stayed in some process 
     // let result = sum(x,y) : result.unwrap() : to get result.
-    let proof_infomation: ProveInfo = prover.prove(env, FIBONACCI_GUEST_ELF).unwrap() ; 
+    let proof_infomation: ProveInfo = prover.prove(env, FIBONACCI_GUEST_ELF).unwrap(); 
     
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    let receipt = proof_infomation.receipt ; 
-    
-    // Host used env::commit() to write the result from computation so 
-    // Journal is part of receipt & records data that guest want to communicated to host 
-    // or we can say it's result from computation 
-    // So we gona decode the result from computation 
-    let result : u64 = receipt.journal.decode().unwrap() ; 
-    println!("Result from fibonachi nunmber when having input x and y compute 15 times : {}",result) ; 
-    
-    // After getting public input as result we can verify the proof 
-    // Creating proof from receipt 
-    // This process receipt is proof but this below verify 
-    // Is just verify the guesttID match to the guest program
-    receipt.verify(FIBONACCI_GUEST_ID).unwrap() ; 
-
-    // The receipt was verified at the end of proving, but the below code is an
-    // example of how someone else could verify this receipt.
-    // If the process of generate proof and verifing is correctly we will see below message
-    println!("Receipt verification succeeded! Computation was done correctly.");
+    Ok(proof_infomation.receipt)
 }
