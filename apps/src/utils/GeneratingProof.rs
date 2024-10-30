@@ -3,7 +3,9 @@
 use methods::{
     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
 };
-use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo , Receipt};
+
+use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo , Receipt , Result };
+use risc0_ethereum_contracts::encode_seal ; 
 
 use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
 use rand::Rng;  // Trait to generate random numbers
@@ -19,7 +21,7 @@ struct Payload{
     binding_randomness : u64,
 }
 
-pub fn generating_receipt() -> Result<Receipt, Box<dyn std::error::Error>> {
+pub fn generating_receipt()-> Result<(Receipt)> {
     // Initialize tracing. In order to view logs, run `RUST_LOG=info cargo run`
     // donno this 
     tracing_subscriber::fmt()
@@ -60,5 +62,7 @@ pub fn generating_receipt() -> Result<Receipt, Box<dyn std::error::Error>> {
     let proof_infomation: ProveInfo = prover.prove(env, FIBONACCI_GUEST_ELF).unwrap(); 
     
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    Ok(proof_infomation.receipt)
+    let receipt: Receipt = proof_infomation.receipt; 
+
+    Ok((receipt))
 }
