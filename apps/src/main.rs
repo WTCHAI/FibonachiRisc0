@@ -8,7 +8,7 @@ use risc0_zkvm::{ sha::Digestible, Receipt };
 use std::env;
 use dotenv::dotenv;
 
-use ethers::prelude::{abigen, ContractFactory , Provider, Http, Signer, Wallet};
+use ethers::prelude::*;
 
 abigen!(
     FibonachiVerifier,
@@ -37,7 +37,14 @@ fn main(){
     ) ;
 
     // Set up providers and user's wallet 
-    // let provider = Provider::<HTTP>::try_connect(url)
+    // let provider = Provider::<Http>::try_from(
+    //    rpc_url.as_str()
+    // ).expect("could not instantiate HTTP Provider");
 
+    let private_key = env::var("PRIVATE_KEY").expect("PRIVATE_KEY must be set");
+    let wallet : LocalWallet = private_key.parse().expect("invalid private key");
+    let walletAddress = wallet.address() ;
+    // println!("Provider : {:?}",provider) ;
+    println!("Wallet Address : {:?}",walletAddress) ;
 
 }
