@@ -23,7 +23,7 @@ fn main(){
     // Out put data from from computation that belong to the proof in zkp this is public output
     let journal_digest = receipt.journal.bytes.clone() ; 
     // Cryptographic attest represent as zeroknowledge proof that computation was perform correctly 
-    let seal = receipt.claim().unwrap().unwrap().digest().as_bytes().to_vec() ;
+    let seal = receipt.claim().unwrap().digest().as_bytes().to_vec() ;
     
     // .unwrap().digest().as_bytes().to_vec() ;
     println!("Seal : {:?} ",seal) ;
