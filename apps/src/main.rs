@@ -10,7 +10,7 @@ use dotenv::dotenv;
 
 use ethers::prelude::{abigen, ContractFactory , Provider, Http, Signer, Wallet};
 
-risc0_zkvmxsq7dcw8favabigen!(
+abigen!(
     FibonachiVerifier,
     r#"[function fibonachiVerify(bytes seal, bytes32 journalDigest)]"#,
 ) ; 
