@@ -54,5 +54,5 @@ fn fibonachi_logic(t : u32, mut  x : u64, mut  y : u64) -> u64  {
         return y  ; 
     }
     // OR recursively
-    // fibonachi_logic(n-1 , y, y+x )
+    // fibonachi_logic(n-1 , y, y+x)
 }
