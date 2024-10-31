@@ -1,50 +1,58 @@
 mod utils{ 
-    pub mod GeneratingProof;
+    pub mod generating_proof;
+    pub mod lib ; 
 }
-use utils::GeneratingProof::{generating_receipt} ;
+use utils::generating_proof::{generating_proof} ;
+use utils::lib::{convertImageToU8} ; 
 
-use risc0_zkvm::{ sha::Digestible, Receipt };
+use methods::FIBONACCI_GUEST_ID;
 
 use std::env;
+use std::sync::Arc;
 use dotenv::dotenv;
+use sha2::{ Digest, Sha256};
 
-use ethers::prelude::*;
+use ethers::prelude::{
+    abigen,
+    SignerMiddleware,
+    Provider,
+    Http,
+    LocalWallet,
+    Address,
+    Signer
+};
 
 abigen!(
-    FibonachiVerifier,
-    r#"[function fibonachiVerify(bytes seal, bytes32 journalDigest)]"#,
-) ; 
+    RiscZeroVerifierRouter,
+    r#"[function verify(bytes calldata seal, bytes32 imageId, bytes32 journalDigest)]"#,
+);
 
-// #[tokio::main]
-fn main(){
+#[tokio::main]
+async fn main(){
     // wanted to publish generated receipt to sepolia
-    // Try using import generating receipt function from another folder
-    let receipt: Receipt = generating_receipt().unwrap() ;
-    // Out put data from from computation that belong to the proof in zkp this is public output
-    let journal_digest = receipt.journal.bytes.clone() ; 
-    // Cryptographic attest represent as zeroknowledge proof that computation was perform correctly 
-    let seal = receipt.claim().unwrap().digest().as_bytes().to_vec() ;
-    
-    // .unwrap().digest().as_bytes().to_vec() ;
-    println!("Seal : {:?} ",seal) ;
-    println!("Journal Digest : {:?} ",journal_digest) ;
-    
     // initialize chain connect cofiguration
     dotenv().ok();
     let rpc_url : String = format!("https://{}.g.alchemy.com/v2/{}",
         env::var("NETWORK").unwrap().as_str(),
         env::var("ALCHEMY_API_KEY").unwrap().as_str()
-    ) ;
+    );
 
     // Set up providers and user's wallet 
-    // let provider = Provider::<Http>::try_from(
-    //    rpc_url.as_str()
-    // ).expect("could not instantiate HTTP Provider");
-
+    let provider = Provider::<Http>::try_from(rpc_url.as_str()).expect("Failed to create provider"); 
     let private_key = env::var("PRIVATE_KEY").expect("PRIVATE_KEY must be set");
     let wallet : LocalWallet = private_key.parse().expect("invalid private key");
-    let walletAddress = wallet.address() ;
-    // println!("Provider : {:?}",provider) ;
-    println!("Wallet Address : {:?}",walletAddress) ;
+    let client = Arc::new(SignerMiddleware::new(provider.clone(), wallet.clone()));
+    // let signer = SignerMiddleware::new(provider.clone(), wallet.clone());
 
+    let verifier_contract_address : Address = "0xf70aBAb028Eb6F4100A24B203E113D94E87DE93C".parse().unwrap() ; 
+    let verifier_contract = RiscZeroVerifierRouter::new(verifier_contract_address, client.clone()) ; 
+
+    // Try using import generating receipt function from another folder
+    let (seal, journal) = generating_proof().expect("Failed to generate proof data");
+    let image_id = convertImageToU8(FIBONACCI_GUEST_ID) ; 
+    let journal_digest = Sha256::digest(journal.clone()) ; 
+    
+    let binding = verifier_contract.verify(seal.into(), image_id.into() , journal_digest.into());
+    let transaction = binding.send().await.expect("Transaction failed");
+    println!("Transaction hash: {:?}", transaction);
 }
