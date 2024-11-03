@@ -24,18 +24,17 @@ contract FibonachiVerifier {
         // journal digested 
         bytes32 journalDiegst = sha256(journal) ; 
         // verify the proof
-        try (verifier.verify(seal, imageId , journalDiegst)){ 
+        try verifier.verify(seal, imageId , journalDiegst) { 
             // If verification is successful, update fibonachiResult and emit success event
             fibonachiResult = abi.decode(journal, (uint256));
             emit ProofSubmittedLogged(msg.sender, block.timestamp, true);
         }
-        catch (bytes memory reason) {
+        catch {
             // If verification fails, emit the failed event with the reason
-            emit ProofFailedLogged(msg.sender, block.timestamp,false);
+            emit ProofSubmittedLogged(msg.sender, block.timestamp,false);
         }
         fibonachiResult = abi.decode(journal, (uint256));
 
-        emit ProofSubmittedLogged(msg.sender , block.timestamp);
     }
 
     function getFinalizeFibonachiResult() public view returns(uint256){
