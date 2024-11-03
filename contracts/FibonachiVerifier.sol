@@ -12,7 +12,7 @@ contract FibonachiVerifier {
     event ProofSubmittedLogged(
         address indexed prover,
         uint256 timestamp,
-        boolean status
+        bool status
     );
 
 
