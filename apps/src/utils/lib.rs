@@ -1,7 +1,10 @@
 use anyhow::{bail, Result};
 use risc0_zkvm::{sha::Digestible, Receipt};
+use risc0_ethereum_contracts::encode_seal;
 
-
+use methods::{
+    FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
+};
 
 pub fn convertImageToU8(vector32: [u32;8]) -> [u8;32] {
     let mut result : [u8;32] = [0u8;32] ; 
@@ -52,9 +55,16 @@ pub fn print_receipt_properties(receipt: &Receipt) {
     println!("Receipt : journal : {:?}",receipt.journal.bytes.clone()) ;
     println!("Receipt : journal digest as byte : {:?}",receipt.journal.bytes.clone().digest().as_bytes() ) ;
     println!("Receipt : metadata : {:?}",receipt.metadata.clone().verifier_parameters.as_bytes()) ;
+
     let seal = receipt.claim().unwrap().digest() ; 
     println!("Seal : {:?}",seal) ;
     println!("Seal as bytes : {:?}",seal.as_bytes()) ;
     println!("Seal as bytes to vec : {:?}",seal.as_bytes().to_vec()) ;
+    println!("Seal as bytes to vec : {:?}",seal.as_bytes().to_vec().len()) ;
+
+    // let seal_encoded_lib = encode_seal(receipt).unwrap() ;
+    // println!("Seal encoded lib : {:?}",seal_encoded_lib) ;
+
+    println!("Image Id : {:?}",FIBONACCI_GUEST_ID) ; 
 
 }

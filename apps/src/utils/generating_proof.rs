@@ -5,7 +5,7 @@ use methods::{
     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
 };
 
-use risc0_zkvm::{default_prover, ExecutorEnv , Receipt };
+use risc0_zkvm::{default_prover, ExecutorEnv , Receipt , VerifierContext , ProverOpts } ;
 
 use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
 use rand::Rng;  // Trait to generate random numbers
@@ -54,14 +54,9 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
     
     // Init prove and guest computation 
     let prover = default_prover().prove(env, FIBONACCI_GUEST_ELF); 
-
+    // let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FIBONACCI_GUEST_ELF, &ProverOpts::default()) ;
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
     let receipt : Receipt = prover.unwrap().receipt ; 
-    // Encode the proof as seal
-    
-    // Extract the journal data
-    // let journal = receipt.journal.bytes.clone();
-
-    // Ok((seal, journal))
+    println!("Receipt : {:?}",receipt) ;
     Ok(receipt)
 }
