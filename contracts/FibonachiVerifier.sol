@@ -1,33 +1,45 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { IRiscZeroVerifier } from "./Risczero/IRisczeroVerifier.sol";
-
-
+import { ImageID } from "./ImageID.sol";
 contract FibonachiVerifier {
     // copy from risczero govenor 
     IRiscZeroVerifier public immutable verifier;
-    bytes32 public immutable imageId;
+    bytes32 public immutable imageId = ImageID.FIBONACHI_ID ;
 
-    constructor(address verifierAddress , bytes32 imageId_){
+    uint256 private fibonachiResult ; 
+
+    event ProofSubmittedLogged(
+        address indexed prover,
+        uint256 timestamp,
+        boolean status
+    );
+
+
+    constructor(address verifierAddress ){
         verifier = IRiscZeroVerifier(verifierAddress);
-        imageId = imageId_;
     }
 
-    function verifyAndFinalizeFibonachi(bytes calldata seal, bytes calldata journal) external {
+    function verifyAndFinalizeFibonachi(bytes calldata seal, bytes calldata journal) public  {
         // journal digested 
         bytes32 journalDiegst = sha256(journal) ; 
         // verify the proof
-        verifier.verify(seal, imageId , journalDiegst);
+        try (verifier.verify(seal, imageId , journalDiegst)){ 
+            // If verification is successful, update fibonachiResult and emit success event
+            fibonachiResult = abi.decode(journal, (uint256));
+            emit ProofSubmittedLogged(msg.sender, block.timestamp, true);
+        }
+        catch (bytes memory reason) {
+            // If verification fails, emit the failed event with the reason
+            emit ProofFailedLogged(msg.sender, block.timestamp,false);
+        }
+        fibonachiResult = abi.decode(journal, (uint256));
 
-        // decode the journal and extract to Fibonachi result
-        // uint256 result;
-        // assembly {
-        //     result := mload(add(journal, 32))
-        // }
-        // lastVerifiedFibonacci = result;
+        emit ProofSubmittedLogged(msg.sender , block.timestamp);
+    }
 
-        // emit FibonacciVerified(result);
-        // _finalizeVotes(proposalId, ballotHash, votingData);
+    function getFinalizeFibonachiResult() public view returns(uint256){
+        return fibonachiResult ;
     }
 }
 
