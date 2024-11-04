@@ -1,10 +1,10 @@
 
 [package]
-name = "methods"
+name = "fibonachi-methods"
 version = { workspace = true }
 edition = { workspace = true }
 
-[package.metadata.risc0]
+[package.metadata.risc0] 
 methods = ["guest"]
 
 [build-dependencies]
