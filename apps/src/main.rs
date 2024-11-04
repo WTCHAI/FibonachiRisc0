@@ -6,7 +6,8 @@ use ethers::core::k256::U256;
 use utils::generating_proof::generating_proof ;
 use utils::lib::{convertImageToU8,print_receipt_properties} ; 
 
-use methods::FIBONACCI_GUEST_ID;
+use fibonachi_methods::FINALIZE_FIBONACHI_ID ; 
+
 
 use std::env;
 use std::sync::Arc;
