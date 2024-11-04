@@ -4,7 +4,7 @@ use fibonachi_methods::{
     FINALIZE_FIBONACHI_ID,FINALIZE_FIBONACHI_ELF 
 };
 
-use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo};
+use risc0_zkvm::{ default_prover , ExecutorEnv, ProveInfo};
 
 use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
 use rand::Rng;  // Trait to generate random numbers

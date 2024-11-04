@@ -1,6 +1,6 @@
 use std::{collections::HashMap, env};
 
-use risc0_build::{embed_methods_with_options, DockerOptions, GuestOptions, embed_methods};
+use risc0_build::{embed_methods_with_options, DockerOptions, GuestOptions};
 use risc0_build_ethereum::generate_solidity_files;
 
 // Paths where the generated Solidity files will be written.
