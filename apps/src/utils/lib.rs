@@ -2,9 +2,9 @@ use anyhow::{bail, Result};
 use risc0_zkvm::{sha::Digestible, Receipt};
 use risc0_ethereum_contracts::encode_seal;
 
-use methods::{
-    FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
-};
+// use methods::{
+//     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
+// };
 
 pub fn convertImageToU8(vector32: [u32;8]) -> [u8;32] {
     let mut result : [u8;32] = [0u8;32] ; 
@@ -64,7 +64,5 @@ pub fn print_receipt_properties(receipt: &Receipt) {
 
     // let seal_encoded_lib = encode_seal(receipt).unwrap() ;
     // println!("Seal encoded lib : {:?}",seal_encoded_lib) ;
-
-    println!("Image Id : {:?}",FIBONACCI_GUEST_ID) ; 
 
 }

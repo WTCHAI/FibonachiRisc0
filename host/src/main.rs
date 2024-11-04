@@ -3,6 +3,7 @@
 use methods::{
     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
 };
+
 use risc0_zkvm::{default_prover, ExecutorEnv, ProveInfo};
 
 use rand::rngs::OsRng;  // Cryptographically secure RNG from the OS
@@ -60,7 +61,7 @@ fn main() {
     let proof_infomation: ProveInfo = prover.prove(env, FIBONACCI_GUEST_ELF).unwrap() ; 
     
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    let receipt = proof_infomation.receipt ; 
+    let receipt: risc0_zkvm::Receipt = proof_infomation.receipt ; 
     
     // Host used env::commit() to write the result from computation so 
     // Journal is part of receipt & records data that guest want to communicated to host 

@@ -5,7 +5,7 @@ target/
 
 node_modules
 .env
-
+/test
 
 # Hardhat files
 /cache
