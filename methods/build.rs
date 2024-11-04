@@ -17,13 +17,15 @@ fn main() {
     });
 
     // Generate Rust source files for the methods crate.
-    let guests = embed_methods_with_options(HashMap::from([(
-        "guests",
-        GuestOptions {
-            features: Vec::new(),
-            use_docker,
-        },
-    )]));
+    let guests = embed_methods_with_options(HashMap::from(
+        [(
+            "fibonachi-guest",
+            GuestOptions {
+                features: Vec::new(),
+                use_docker,
+            },
+        )]
+    ));
 
     // Generate Solidity source files for use with Forge.
     let solidity_opts = risc0_build_ethereum::Options::default()
@@ -32,5 +34,4 @@ fn main() {
 
     generate_solidity_files(guests.as_slice(), &solidity_opts).unwrap();
 
-    embed_methods();
 }
