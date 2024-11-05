@@ -59,12 +59,9 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .unwrap();
 
     // Init prove and guest computation
-    // let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
-    let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
+    let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
+    // let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    let receipt: Receipt = prover_ctx.unwrap().receipt;
-
-    let seal = encode_seal(&receipt);
-    println!("Seal : {:?}",seal) ;
+    let receipt: Receipt = prover.unwrap().receipt;
     Ok(receipt)
 }
