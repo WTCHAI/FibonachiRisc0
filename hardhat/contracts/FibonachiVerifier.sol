@@ -17,7 +17,6 @@ contract FibonachiVerifier {
         bool status
     );
 
-
     constructor(address verifierAddress ){
         verifier = IRiscZeroVerifier(verifierAddress);
     }
@@ -25,17 +24,16 @@ contract FibonachiVerifier {
     function verifyAndFinalizeFibonachi(bytes calldata seal, bytes calldata journal) public  {
         // journal digested 
         bytes32 journalDiegst = sha256(journal) ; 
+        fibonachiResult = abi.decode(journal, (uint256));
         // verify the proof
         try verifier.verify(seal, imageId , journalDiegst) { 
             // If verification is successful, update fibonachiResult and emit success event
-            fibonachiResult = abi.decode(journal, (uint256));
             emit ProofSubmittedLogged(msg.sender, block.timestamp, true);
         }
         catch {
             // If verification fails, emit the failed event with the reason
             emit ProofSubmittedLogged(msg.sender, block.timestamp,false);
         }
-        fibonachiResult = abi.decode(journal, (uint256));
     }
 
     function getFinalizeFibonachiResult() public view returns(uint256){

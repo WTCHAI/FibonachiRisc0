@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
     apiKey : process.env.ETHERSCAN_API_KEY
   },
   sourcify: {
-    enabled: true
+    enabled: false
   },
   gasReporter:{
     enabled: true

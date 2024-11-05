@@ -3,15 +3,18 @@ mod utils {
     pub mod lib;
 }
 
+use risc0_zkvm::{sha::Digestible};
+// use risc0_ethereum_contracts::encode_seal;
 use utils::generating_proof::generating_proof;
-use utils::lib::{convertImageToU8, print_receipt_properties};
+// use utils::lib::{print_receipt_properties};
 
 use dotenv::dotenv;
 
 use std::env;
 use std::sync::Arc;
 
-use ethers::prelude::{abigen, Address, Http, LocalWallet, Provider, Signer, SignerMiddleware};
+
+use ethers::prelude::{abigen, Address, Http, LocalWallet, Provider, SignerMiddleware};
 
 abigen!(
     FibonacciVerifier,
@@ -35,19 +38,22 @@ async fn main() {
     let wallet: LocalWallet = private_key.parse().expect("invalid private key");
 
     let client = Arc::new(SignerMiddleware::new(provider.clone(), wallet.clone()));
-    let signer = SignerMiddleware::new(provider.clone(), wallet.clone());
 
-    let fibonachi_verifier_contract_address: Address = "0xc5A836Ec8788Af26C552B6F9690b5D9Ea09dF0fD"
+    let fibonachi_verifier_contract_address: Address = "0xBB5F54fB2268152A4A4316D306828B9eC6C0bBbD"
         .parse()
         .unwrap();
-    let fibonachi_verifier_contract =
-        FibonacciVerifier::new(fibonachi_verifier_contract_address, client.clone());
+
+    let fibonachi_verifier_contract =FibonacciVerifier::new(fibonachi_verifier_contract_address, client.clone());
 
     // Try using import generating receipt function from another folder
-    let receipt = generating_proof().expect("Failed to generating receipt"); // .expect("Failed to generate proof data");
-                                                                             // print_receipt_properties(&receipt) ;
+    let receipt = generating_proof().expect("Failed to generating receipt"); // .expect("Failed to generate proof data");   
+    // print_receipt_properties(&receipt) ;
+    
+    let journal = receipt.clone().journal.digest().as_bytes().to_vec() ; 
+    // println!("Journal : {:?}",journal) ;
+    let seal = receipt.clone().claim().unwrap().digest().as_bytes().to_vec() ; 
+    // println!("Seal : {:?}",seal) ;
 
-    // let binding = verifier_contract.verify(seal.into(), image_id.into() , journal_digest.into());
-    // let transaction = binding.send().await.expect("Transaction failed");
-    // println!("Transaction hash: {:?}", transaction);
+    fibonachi_verifier_contract.verify_and_finalize_fibonachi(seal.into(), journal.into()).await.expect("Failed to verify and finalize fibonachi") ; 
+    println!("Fibonachi verified and finalized on chain") ;
 }
