@@ -1,43 +1,19 @@
 use anyhow::{bail, Result};
-use risc0_zkvm::{sha::Digestible, Receipt};
-use risc0_ethereum_contracts::encode_seal;
+use risc0_zkvm::{sha::Digestible, InnerReceipt, Receipt};
+// use risc0_ethereum_contracts::encode_seal; 
 
-// use methods::{
-//     FIBONACCI_GUEST_ELF, FIBONACCI_GUEST_ID
-// };
-
-pub fn convertImageToU8(vector32: [u32;8]) -> [u8;32] {
-    let mut result : [u8;32] = [0u8;32] ; 
-
-    for (i, &value) in vector32.iter().enumerate() {
-        let bytes = value.to_le_bytes(); // Convert each u32 to 4 bytes
-        let start = i * 4;
-        result[start..start + 4].copy_from_slice(&bytes);
-    }
-    result
-}
-
-// pub fn encode_seal_lib(receipt: &risc0_zkvm::Receipt) -> Result<Vec<u8>> {
-//     println!("Receipt {:?}",receipt) ;
+// pub fn encode_seal_lib(receipt: &Receipt) -> Result<Vec<u8>> {
+//     // We use Fake here as a stand-in, similar to what would happen without Groth16 on macOS.
 //     let seal = match receipt.inner.clone() {
-//         InnerReceipt::Fake(receipt) => {
-//             let seal = receipt.claim.digest().as_bytes().to_vec();
-//             let selector = &[0u8; 4];
-//             // Create a new vector with the capacity to hold both selector and seal
-//             let mut selector_seal = Vec::with_capacity(selector.len() + seal.len());
+//         InnerReceipt::Fake(fake_receipt) => {
+//             let claim_seal = fake_receipt.claim.digest().as_bytes().to_vec();
+//             let selector = &[0u8; 4]; // Placeholder selector for testing
+//             let mut selector_seal = Vec::with_capacity(selector.len() + claim_seal.len());
 //             selector_seal.extend_from_slice(selector);
-//             selector_seal.extend_from_slice(&seal);
+//             selector_seal.extend_from_slice(&claim_seal);
 //             selector_seal
 //         }
-//         InnerReceipt::Groth16(receipt) => {
-//             let selector = &receipt.verifier_parameters.as_bytes()[..4];
-//             // Create a new vector with the capacity to hold both selector and seal
-//             let mut selector_seal = Vec::with_capacity(selector.len() + receipt.seal.len());
-//             selector_seal.extend_from_slice(selector);
-//             selector_seal.extend_from_slice(receipt.seal.as_ref());
-//             selector_seal
-//         }
-//         _ => bail!("Unsupported receipt type"),
+//         _ => bail!("Unsupported receipt type for mock"),
 //     };
 //     Ok(seal)
 // }

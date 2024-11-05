@@ -3,6 +3,7 @@ use std::result::Result;
 // The ELF is used for proving and the ID is used for verification.
 use methods::FINALIZE_FIBONACHI_ELF;
 
+use risc0_ethereum_contracts::encode_seal;
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, Receipt, VerifierContext};
 
 use rand::rngs::OsRng; // Cryptographically secure RNG from the OS
@@ -58,9 +59,12 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .unwrap();
 
     // Init prove and guest computation
-    let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
-    // let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::default()) ;
+    // let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
+    let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    let receipt: Receipt = prover.unwrap().receipt;
+    let receipt: Receipt = prover_ctx.unwrap().receipt;
+
+    let seal = encode_seal(&receipt);
+    println!("Seal : {:?}",seal) ;
     Ok(receipt)
 }
