@@ -54,7 +54,7 @@ async fn main() {
     let call_data = fibonachi_verifier_contract.verify_and_finalize_fibonachi(seal.into(), journal.into()) ; 
     // println!("Journal : {:?}",journal) ;
     // println!("Seal : {:?}",seal) ;
-    println!("Call data : {:?}",call_data.calldata().unwrap()) ;
+    // println!("Call data : {:?}",call_data.calldata().unwrap()) ;
 
     let transaction = TransactionRequest::new()
         .to(fibonachi_verifier_contract_address)
