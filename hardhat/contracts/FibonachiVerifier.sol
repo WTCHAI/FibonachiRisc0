@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.27;
 
-import { IRiscZeroVerifier } from "../Risczero/IRisczeroVerifier.sol";
+import { IRiscZeroVerifier } from "./Risczero/IRisczeroVerifier.sol";
 import { ImageID } from "./ImageID.sol";
 
 contract FibonachiVerifier {
