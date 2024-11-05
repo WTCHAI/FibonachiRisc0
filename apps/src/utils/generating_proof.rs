@@ -28,7 +28,7 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .init();
 
     // This is private input knowing only real prover
-    let private_inputy = 10;
+    let private_inputy = 15;
 
     // randomness setup
     let mut rng = OsRng;
@@ -46,7 +46,7 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
     let payload = Payload {
         times: 15,
         x: 0,
-        y: 10, // Testing random input y to generate proof
+        y: 15, // Testing random input y to generate proof
         correct_y: private_inputy,
         binding_randomness: binding_randomness_values,
     };

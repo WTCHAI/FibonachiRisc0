@@ -40,7 +40,7 @@ async fn main() {
 
     let client = Arc::new(SignerMiddleware::new(provider.clone(), wallet.clone()));
 
-    let fibonachi_verifier_contract_address: Address = "0xBB5F54fB2268152A4A4316D306828B9eC6C0bBbD"
+    let fibonachi_verifier_contract_address: Address = "0x5d3d7bb5228F9Ef3624eB8E43BF6f0a68B5B9848"
         .parse()
         .unwrap();
 
