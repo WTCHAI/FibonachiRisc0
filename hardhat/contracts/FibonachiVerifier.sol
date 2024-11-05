@@ -16,12 +16,14 @@ contract FibonachiVerifier {
         uint256 timestamp,
         bool status
     );
+    event CallingVerifier(address indexed prover);
 
     constructor(address verifierAddress ){
         verifier = IRiscZeroVerifier(verifierAddress);
     }
 
     function verifyAndFinalizeFibonachi(bytes calldata seal, bytes calldata journal) public  {
+        emit CallingVerifier(msg.sender);
         // journal digested 
         bytes32 journalDiegst = sha256(journal) ; 
         fibonachiResult = abi.decode(journal, (uint256));
