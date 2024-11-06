@@ -8,10 +8,10 @@ require("dotenv").config();
 const config: HardhatUserConfig = {
   solidity: "0.8.27",
   networks: {
-    // sepolia: {
-    //   url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
-    //   accounts: [`0x${process.env.PRIVATE_KEY_MY_WALLET_SEPOLIA}`],
-    // },
+    sepolia: {
+      url: `${process.env.SEPOLIA_RPC_URL}`,
+      accounts: [`0x${process.env.PRIVATE_KEY_SEPOLIA}`],
+    },
     holesky:{
       url: `${process.env.HOLESKY_RPC_URL}`,
       accounts: [process.env.PRIVATE_KEY_HOLESKY!]
