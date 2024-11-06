@@ -25,10 +25,10 @@ fn main() {
     }
 
     // Proceed with the Fibonacci computation
-    let modifier_x : u64 = payload.x % payload.binding_randomness ; 
-    let modifier_y : u64 = payload.y % payload.binding_randomness ; 
+    // let modifier_x : u64 = payload.x % payload.binding_randomness ; 
+    // let modifier_y : u64 = payload.y % payload.binding_randomness ; 
     // getting result from fibonachi process 
-    let result : u64 = fibonachi_logic(payload.times, modifier_x,modifier_y ) ;
+    let result : u64 = fibonachi_logic(payload.times, payload.x,payload.y ) ;
 
     // Commiting result specific into env called journal
     env::commit(&result);
