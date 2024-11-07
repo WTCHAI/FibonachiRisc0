@@ -6,6 +6,7 @@ use methods::FINALIZE_FIBONACHI_ELF;
 use risc0_ethereum_contracts::encode_seal;
 use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, Receipt, VerifierContext};
 
+
 use rand::rngs::OsRng; // Cryptographically secure RNG from the OS
 use rand::Rng; // Trait to generate random numbers
 
@@ -28,7 +29,7 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .init();
 
     // This is private input knowing only real prover
-    let private_inputy = 15;
+    let private_inputy = 100;
 
     // randomness setup
     let mut rng = OsRng;
@@ -44,9 +45,9 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
 
     // Define variable for our program
     let payload = Payload {
-        times: 15,
-        x: 0,
-        y: 15, // Testing random input y to generate proof
+        times: 300,
+        x: 50,
+        y: 100, // Testing random input y to generate proof
         correct_y: private_inputy,
         binding_randomness: binding_randomness_values,
     };
@@ -59,11 +60,11 @@ pub fn generating_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .unwrap();
 
     // Init prove and guest computation
-    // let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
-    let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
+    let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
+    // let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
-    // let receipt: Receipt = prover.unwrap().receipt;
-    let receipt: Receipt = prover_ctx.unwrap().receipt;
+    let receipt: Receipt = prover.unwrap().receipt;
+    // let receipt: Receipt = prover_ctx.unwrap().receipt;
 
     Ok(receipt)
 }

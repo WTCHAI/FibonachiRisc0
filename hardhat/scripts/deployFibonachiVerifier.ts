@@ -16,7 +16,7 @@ async function Deployer(contractName:string){
         // Deploying the contract using the deployer's signer [0] related on hardhat config
         // Which contract is require owner so we have to connect owner = msg.sender  
         // Refactor deploying without telling who is signers cause already declare in env & hardhat config
-        const FibonachiContract = await ContractFactory.deploy(risczeroVerifierContractAddressSepolia)
+        const FibonachiContract = await ContractFactory.deploy(risczeroVerifierContractAddressHole)
         await FibonachiContract.deploymentTransaction()?.wait(3)
 
         // Verifing contract 
@@ -25,7 +25,7 @@ async function Deployer(contractName:string){
         try {
             await hre.run("verify:verify", {
                 address : FibonachiContractAddress,
-                constructorArguments : [risczeroVerifierContractAddressSepolia]
+                constructorArguments : [risczeroVerifierContractAddressHole]
             })
         }catch(err){
             console.error("Error during verification:",err);
@@ -41,5 +41,5 @@ async function Deployer(contractName:string){
 // running script 
 // npx hardhat run scripts/deploy.ts --network holesky
 // npx hardhat run scripts/deployFibonachiVerifier.ts --network holesky
-// contract address : 0x5d3d7bb5228F9Ef3624eB8E43BF6f0a68B5B9848
+// contract address : 0x1E0122e128b316381E439e3aAcDD1aE88E7669F7
 Deployer("FibonachiVerifier");
