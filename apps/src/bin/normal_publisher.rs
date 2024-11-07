@@ -1,8 +1,6 @@
 use apps::utils::generating_proof::normal_proof ; 
-use apps::utils::receipt_interface::PayloadRequest ; 
 
 use risc0_zkvm::{sha::Digestible};
-use risc0_ethereum_contracts::encode_seal;
 
 use dotenv::dotenv;
 use std::env;
@@ -59,9 +57,6 @@ async fn main() {
     // println!("Journal (Hex): 0x{}", hex::encode(&journal));
     // println!("Seal (Hex): 0x{}", hex::encode(&seal));
     // println!("Call data : {:?}",call_data.calldata().unwrap()) ;
-
-
-
 
     let transaction = TransactionRequest::new()
         .to(fibonachi_verifier_contract_address)

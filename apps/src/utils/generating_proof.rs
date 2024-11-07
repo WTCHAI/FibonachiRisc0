@@ -9,10 +9,9 @@ use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 
 use rand::rngs::OsRng; // Cryptographically secure RNG from the OS
 use rand::Rng; // Trait to generate random numbers
+use serde::Serialize;
 
 pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
-    use serde::Serialize;
-    // Declare struct payload & serde used for derive struct in rust guess ?
     #[derive(Serialize)]
     struct Payload {
         times: u32,
@@ -28,7 +27,7 @@ pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         .init();
 
     // This is private input knowing only real prover
-    let private_inputy = 100;
+    let private_inputy = 10;
 
     // randomness setup
     let mut rng = OsRng;
@@ -44,24 +43,25 @@ pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
 
     // Define variable for our program
     let payload = Payload {
-        times: 300,
-        x: 50,
-        y: 100, // Testing random input y to generate proof
+        times: 10,
+        x: 0,
+        y: 10, // Testing random input y to generate proof
         correct_y: private_inputy,
         binding_randomness: binding_randomness_values,
     };
-
+    
     // Creating env as environtment for our program
     let env = ExecutorEnv::builder()
         .write(&payload)
         .unwrap()
         .build()
         .unwrap();
-
+    
     // Init prove and guest computation
     let prover = default_prover().prove(env, FINALIZE_FIBONACHI_ELF);
     // let prover_ctx = default_prover().prove_with_ctx(env, &VerifierContext::default(), FINALIZE_FIBONACHI_ELF, &ProverOpts::groth16()) ;
     // Receipt is a Proof that guest code computation inside vm known as Proof : ChatGPT
+
     let receipt: Receipt = prover.unwrap().receipt;
     // let receipt: Receipt = prover_ctx.unwrap().receipt;
 

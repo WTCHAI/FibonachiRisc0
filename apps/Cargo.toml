@@ -3,6 +3,11 @@ name = "apps"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "normal"
+path = "src/bin/normal_publisher.rs"
+
+
 [dependencies]
 risc0-zkvm = { version = "1.1.2" }
 risc0-ethereum-contracts = { version = "1.1.4" }
