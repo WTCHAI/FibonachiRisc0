@@ -6,7 +6,7 @@ edition = "2021"
 #  Declare ELF & ID here accoring to embed method in build logic definition
 [[bin]]
 name = "finalize_fibonachi"
-path = "src/bin/fibonachi.rs"
+path = "src/bin/fibonachi_v2.rs"
 
 [workspace]
 
