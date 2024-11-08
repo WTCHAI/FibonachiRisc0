@@ -47,7 +47,7 @@ async fn main() {
     let journal = receipt.clone().journal.bytes ; 
     let seal = receipt.clone().claim().unwrap().digest().as_bytes().to_vec();
 
-    let call_data = fibonachi_verifier_contract.verify_and_finalize_fibonachi(seal.clone().into(), journal.clone().into()) ; 
+    let call_data = fibonachi_verifier_contract.add_verifier(seal.clone().into()) ; 
     let transaction = TransactionRequest::new()
         .to(fibonachi_verifier_contract_address)
         .data(call_data.calldata().unwrap())
