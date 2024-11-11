@@ -58,15 +58,18 @@ async fn main() {
     // let seal_snarks = encode_seal(&receipt) ; 
 
     // The verifier contracts in hardhat/contract/FibonachiVerfier.sol
-    // Please know that I've learn zk just a couple weeks.I heard & start risc0 rust based language from invisible garden hackerhouse 
+    // Please know that I've learn zk just a couple weeks.I've heard & start risc0 rust based language from mentor in the invisible garden hackerhouse 
     // Here my question about the process of how we going to verify onchain when it's come to the environtment usecase 
-    // I Research a lot about what it should be in the process of verify onchain
+    // I Research a lot about what it should be in the process of verify onchain but still not 100% understood
+    // Here's a revert that i'm facing but it might because Starks proof cannot verify onchain https://app.blocksec.com/explorer/tx/holesky/0xc5d130cbf1bd6904b56216ef4021c34e62e05ae305a396c9933eacc5b4795eef?line=2 
+    // even if i know that strak cannot proof but I've tried add seal[0:4] selector manually as a admin to Risc0VerfiyRouter but still facing revert.
+
     // In the case that teachers gave an example for Student finding exact both input x,y for fibonachi where result of fibo equals to public output
     // 1. Teachers have to published the fiboverifier with correct seal & imageId & journalDigest onchain also having methods verify which will call to Risc0VerfiyRouter
     // 2. Teachers deploy Risc0VerfiyRouter and init correct seal[0:4] bytes into verifiers mapping and call again ? Here the part that i still confused.
     // 3. What Teacher have to setup in term of prepare contracts 
     // 4. How the flow of students will called the FibonachiVerfier.verify() ? 
-    // 5. Is the process compare the computed proof in the end cause i've try fork testnet to add the seal[0:4] in Risc0VerfiyRouter as a admin ut prover still facing revert unknowSelector
+    // 5. Is the process compare the computed proof in the end cause i've try fork testnet to add the seal[0:4] in Risc0VerfiyRouter as a admin but prover still facing revert unknowSelector
     // 6. In my Project for ethglobals use cases have similars flow of these 2 user roles have to proof and verify onchain. 
     // Please know that i've already spend a lot of time in examples repo & risc0ethreum already.
 
