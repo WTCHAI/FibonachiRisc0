@@ -5,7 +5,7 @@ use risc0_zkvm::{sha::Digestible , Receipt};
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadRequest {
-    pub time : u64,
+    pub times : u64,
     pub x: u64,
     pub y: u64,
 }
