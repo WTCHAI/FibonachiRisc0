@@ -10,6 +10,8 @@ contract FibonachiVerifier {
     bytes32 public immutable imageId = ImageID.FINALIZE_FIBONACHI_ID ;
 
     uint256 private fibonachiResult ; 
+    bytes32 private journalDigest ; 
+    bytes private seal ; 
 
     event ProofSubmittedLogged(
         address indexed prover,
@@ -22,13 +24,29 @@ contract FibonachiVerifier {
         verifier = IRiscZeroVerifier(verifierAddress);
     }
 
-    function verifyAndFinalizeFibonachi(bytes calldata seal, bytes calldata journal) public  {
+    function verifyAndFinalizeFibonachi(
+        bytes calldata seal_,
+        bytes calldata journal
+    ) public {
         emit CallingVerifier(msg.sender);
         // journal digested 
-        bytes32 journalDiegst = sha256(journal) ; 
-        fibonachiResult = abi.decode(journal, (uint256));
+        require(journal.length != 0, "Journal data not valid bytes"); 
+
+        journalDigest = sha256(journal) ;
+        fibonachiResult = (
+            (uint64(uint8(journal[0])) << 56) |
+            (uint64(uint8(journal[1])) << 48) |
+            (uint64(uint8(journal[2])) << 40) |
+            (uint64(uint8(journal[3])) << 32) |
+            (uint64(uint8(journal[4])) << 24) |
+            (uint64(uint8(journal[5])) << 16) |
+            (uint64(uint8(journal[6])) << 8) |
+            uint64(uint8(journal[7]))
+        );        
+        seal = seal_ ; 
+
         // verify the proof
-        try verifier.verify(seal, imageId , journalDiegst) { 
+        try verifier.verify(seal, imageId , journalDigest) { 
             // If verification is successful, update fibonachiResult and emit success event
             emit ProofSubmittedLogged(msg.sender, block.timestamp, true);
         }
@@ -40,5 +58,13 @@ contract FibonachiVerifier {
 
     function getFinalizeFibonachiResult() public view returns(uint256){
         return fibonachiResult ;
+    }
+
+    function getJournalDigested() public view returns(bytes32){
+        return journalDigest ; 
+    }
+
+    function getSealDigested() public view returns(bytes memory) { 
+        return seal ; 
     }
 }

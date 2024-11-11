@@ -25,7 +25,7 @@ contract RiscZeroVerifierRouter is IRiscZeroVerifier, Ownable {
     /// @notice Mapping from 4-byte verifier selector to verifier contracts.
     ///         Used to route receipts to verifiers that are able to check the receipt.
     mapping(bytes4 => IRiscZeroVerifier) public verifiers;
-
+    
     /// @notice Value of an entry that has never been set.
     IRiscZeroVerifier internal constant UNSET = IRiscZeroVerifier(address(0));
     /// @notice A "tombstone" value used to mark verifier entries that have been removed from the mapping.
