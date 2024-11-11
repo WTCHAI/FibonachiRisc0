@@ -1,22 +1,7 @@
-Risc Zero
+Please focus in apps/src/bin/normal_publisher.rs
 
-ZKVM 101 summary 
+also don't forget to setup .env along with the .env.example
 
-setting your rust analyzer to debug unbehavior 
-Add yours directory 
-  "rust-analyzer.linkedProjects": ["methods/guest/Cargo.toml","host/Cargo.toml"],
-
-Creating new project by
-cargo risczero new my_project --guest-name guest_code_for_zk_proof
-
-
-
-installing rust risczero 
-curl -L https://risczero.com/install | bash
-
-rzup install
-
-rzup install cpp
-
+You can read my question and bugs that I've found in comments 
 
 
