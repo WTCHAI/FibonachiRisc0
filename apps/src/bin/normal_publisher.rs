@@ -67,7 +67,8 @@ async fn main() {
     // 3. What Teacher have to setup in term of prepare contracts 
     // 4. How the flow of students will called the FibonachiVerfier.verify() ? 
     // 5. Is the process compare the computed proof in the end cause i've try fork testnet to add the seal[0:4] in Risc0VerfiyRouter as a admin ut prover still facing revert unknowSelector
-    // 6. In my Project use cases have similars flow of these 2 user roles have to proof and verify onchain. 
+    // 6. In my Project for ethglobals use cases have similars flow of these 2 user roles have to proof and verify onchain. 
+    // Please know that i've already spend a lot of time in examples repo & risc0ethreum already.
 
     let call_data = fibonachi_verifier_contract.verify_and_finalize_fibonachi(seal_starks.clone().into(), journal.clone().into()) ; 
 
