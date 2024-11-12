@@ -59,7 +59,7 @@ pub async fn bonsai_proof () -> Result<Receipt, Box<dyn std::error::Error>> {
     let payload_internal_env = PayloadRequest {
         times: 10,
         x: 0,
-        y: 10,
+        y: 15,
     };
     
     let receipt = task::spawn_blocking(move || {
@@ -77,6 +77,7 @@ pub async fn bonsai_proof () -> Result<Receipt, Box<dyn std::error::Error>> {
         );
         prover_ctx.unwrap().receipt
     }).await.unwrap() ; 
+
     Ok(receipt)
     
 }

@@ -1,19 +1,24 @@
 
-use ethers::types::U256;
+use ethers::{abi::Bytes, types::{Address , U256} };
 use risc0_zkvm::{sha::Digestible , Receipt};
 
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadRequest {
-    pub times : u64,
-    pub x: u64,
-    pub y: u64,
+    pub times : u32,
+    pub x: u32,
+    pub y: u32,
 }
-
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadResponse { 
     pub journal: Vec<u8>,           // Journal data in bytes        // Journal data in hex format
     pub seal: Vec<u8>              // Seal data in bytes
 }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct JournalPayload{
+    pub challenger: Address,
+    pub journal: Bytes ,
+} 
 
 pub fn print_receipt_properties(receipt: &Receipt) {
     // Print the full receipt for debugging
@@ -43,4 +48,6 @@ pub fn print_receipt_properties(receipt: &Receipt) {
     println!("Seal (Hex): 0x{}", hex::encode(&seal));
 
 }
+
+
 
