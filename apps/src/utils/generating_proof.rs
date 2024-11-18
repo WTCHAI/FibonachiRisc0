@@ -55,29 +55,28 @@ pub async fn bonsai_proof () -> Result<Receipt, Box<dyn std::error::Error>> {
     tracing_subscriber::fmt()
     .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
     .init();
-
-    let payload_internal_env = PayloadRequest {
+    
+    let payload = PayloadRequest {
         times: 10,
         x: 0,
         y: 15,
     };
+    let payload_json = serde_json::to_vec(&payload).unwrap(); 
     
     let receipt = task::spawn_blocking(move || {
         let env = ExecutorEnv::builder()
-        .write(&payload_internal_env)
+        .write(&payload_json)
         .unwrap()
         .build()
         .unwrap();
-
         let prover_ctx = default_prover().prove_with_ctx(
             env,
             &VerifierContext::default(),
             FINALIZE_FIBONACHI_ELF,
             &ProverOpts::groth16()
         );
-        prover_ctx.unwrap().receipt
+        prover_ctx.unwrap().receipt    
     }).await.unwrap() ; 
-
     Ok(receipt)
     
 }

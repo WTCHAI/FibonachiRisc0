@@ -20,5 +20,5 @@ pragma solidity ^0.8.20;
 
 library Elf {
     string public constant FINALIZE_FIBONACHI_PATH =
-        "/Users/wtchai/Vscode/Study/Risczero/FibonachiRiscZero/target/riscv-guest/riscv32im-risc0-zkvm-elf/release/finalize_fibonachi";
+        "/Users/wtchai/Vscode/Work/Zk/FibonachiRiscZero/target/riscv-guest/riscv32im-risc0-zkvm-elf/release/finalize_fibonachi";
 }

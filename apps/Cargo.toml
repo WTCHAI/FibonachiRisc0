@@ -8,8 +8,8 @@ name = "normal"
 path = "src/bin/normal_publisher.rs"
 
 [[bin]]
-name = "teacher"
-path = "src/bin/teacher_publisher.rs"
+name = "test"
+path = "src/bin/test_compute_fibo.rs"
 
 
 [dependencies]
@@ -24,6 +24,7 @@ dotenv = "0.15"
 tokio = { workspace = true } 
 serde = { workspace = true}
 serde_derive = { workspace = true }
+serde_json = { workspace = true }
 sha2 = {workspace = true}
 anyhow = {workspace = true}
 hex = {workspace = true}

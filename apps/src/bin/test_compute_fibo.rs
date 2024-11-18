@@ -12,9 +12,6 @@ use tokio ;
 use ethers::{abi::encode, prelude::{abigen, Address, Http, LocalWallet, Middleware, Provider, Signer, SignerMiddleware, TransactionRequest}};
 use ethers::types::U256 ; 
 
-
-
-
 #[tokio::main]
 async fn main() {
     dotenv().ok();
