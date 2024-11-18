@@ -6,7 +6,7 @@ use risc0_zkvm::{sha::Digestible};
 use dotenv::dotenv;
 use std::env;
 use std::sync::Arc;
-use hex;
+use hex; 
 use tokio ; 
 
 use ethers::{abi::encode, prelude::{abigen, Address, Http, LocalWallet, Middleware, Provider, Signer, SignerMiddleware, TransactionRequest}};
@@ -24,10 +24,10 @@ async fn main() {
     dotenv().ok();
     let rpc_url: String = format!(
         "https://{}.g.alchemy.com/v2/{}",
-        env::var("NETWORK").unwrap().as_str(),
+        env::var("NETWORK_SEPOLIA").unwrap().as_str(),
         env::var("ALCHEMY_API_KEY").unwrap().as_str()
     );
-    let chain_id = env::var("CHAIN_ID").unwrap().parse::<u64>().unwrap(); 
+    let chain_id = env::var("CHAIN_ID_SEPOLIA").unwrap().parse::<u64>().unwrap(); 
     
     let provider = Provider::<Http>::try_from(rpc_url.as_str()).expect("Failed to create provider");
     let private_key = env::var("PRIVATE_KEY_HOLESKY").expect("PRIVATE_KEY must be set");
@@ -35,7 +35,7 @@ async fn main() {
 
     let client = Arc::new(SignerMiddleware::new(provider.clone(), wallet.clone()));
 
-    let fibonachi_verifier_contract_address: Address = "0x206ADBa7b67FF84519Add28bDa6b8b3fE14bd6CA"
+    let fibonachi_verifier_contract_address: Address = "0xc7203C888730a286FeCDFF86AA839853fFd4953F"
         .parse()
         .unwrap();
     let fibonachi_verifier_contract = FibonachiVerifierContract::new(fibonachi_verifier_contract_address, client.clone());
