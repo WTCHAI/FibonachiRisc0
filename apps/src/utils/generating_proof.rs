@@ -1,14 +1,15 @@
+use risc0_zkvm::{ default_prover , ExecutorEnv, Receipt, VerifierContext,ProverOpts};
+
 use std::result::Result;
 use dotenv::dotenv;
-use std::env;
-use serde::Serialize;
 
 use methods::FINALIZE_FIBONACHI_ELF;
 
-use crate::utils::receipt_interface::PayloadRequest ; 
-use crate::utils::receipt_interface::print_receipt_properties ; 
-use risc0_zkvm::{ default_prover , ExecutorEnv, Receipt, VerifierContext,ProverOpts};
+use crate::utils::receipt_interface::{PayloadRequest, FrontPayloadRequest} ; 
+use alloy_primitives::U256;
+use alloy_sol_types::SolValue;
 
+use serde::Serialize;
 
 pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
     #[derive(Serialize)]
@@ -18,7 +19,6 @@ pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         y : u64,
     }
     
-
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
@@ -55,27 +55,36 @@ pub async fn bonsai_proof () -> Result<Receipt, Box<dyn std::error::Error>> {
     tracing_subscriber::fmt()
     .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
     .init();
-
-    let payload_internal_env = PayloadRequest {
-        times: 10,
+    
+    // Assume this PayloadRequest is receiving integers from the frontend
+    let frontend_payload = FrontPayloadRequest {
+        times: 10, // Received as integer
         x: 0,
-        y: 10,
+        y: 15,
     };
+
+    // Dynamically convert frontend integers to U256
+    let payload = PayloadRequest {
+        times: U256::from(frontend_payload.times),
+        x: U256::from(frontend_payload.x),
+        y: U256::from(frontend_payload.y),
+    };
+
+    let payload_json = serde_json::to_vec(&payload).unwrap(); 
     
     let receipt = task::spawn_blocking(move || {
         let env = ExecutorEnv::builder()
-        .write(&payload_internal_env)
+        .write(&payload_json)
         .unwrap()
         .build()
         .unwrap();
-
         let prover_ctx = default_prover().prove_with_ctx(
             env,
             &VerifierContext::default(),
             FINALIZE_FIBONACHI_ELF,
             &ProverOpts::groth16()
         );
-        prover_ctx.unwrap().receipt
+        prover_ctx.unwrap().receipt    
     }).await.unwrap() ; 
     Ok(receipt)
     

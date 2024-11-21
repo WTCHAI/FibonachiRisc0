@@ -10,11 +10,11 @@ const config: HardhatUserConfig = {
   networks: {
     sepolia: {
       url: `${process.env.SEPOLIA_RPC_URL}`,
-      accounts: [`0x${process.env.PRIVATE_KEY_SEPOLIA}`],
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
     holesky:{
       url: `${process.env.HOLESKY_RPC_URL}`,
-      accounts: [process.env.PRIVATE_KEY_HOLESKY!]
+      accounts: [process.env.PRIVATE_KEY!]
     }
   },
   etherscan: { 

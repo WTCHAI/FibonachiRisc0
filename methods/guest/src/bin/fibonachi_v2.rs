@@ -1,42 +1,49 @@
+use std::io::Read;
 
 use risc0_zkvm::guest::env;
+use serde::{Deserialize, Serialize};
+use serde_json::{Result as JsonResult, Value};
 
-use serde::Deserialize;  // Import Deserialize to read structs
-#[derive(Deserialize)]
-// Declare struct to use as input of guest program from env which set at host side 
-struct Payload{
-    times : u64,
-    x : u64, 
-    y : u64,
+use alloy_primitives::U256;
+use alloy_sol_types::SolValue;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Payload {
+    times: U256,
+    x: U256,
+    y: U256,
 }
 
 fn main() {
+    let mut payload_bytes = Vec::<u8>::new();
+    env::stdin().read_to_end(&mut payload_bytes).unwrap();
 
-    let payload : Payload = env::read() ;     
-    let result : u64 = fibonachi_logic(
-        payload.times,
-        payload.x,
-        payload.y
-    ) ;
+    let filtered_bytes: Vec<u8> = payload_bytes
+    .iter()
+    .cloned()
+    .filter(|&b| b != 0)
+    .collect();
 
-    env::commit(&result) ; 
+    let payload_result: JsonResult<Payload> = serde_json::from_slice(&filtered_bytes[1..]);
+
+    let data = payload_result.unwrap();
+    let result = fibonachi_logic(data.times, data.x, data.y);
+    env::commit_slice(&result.abi_encode().as_slice());
 }
 
-fn fibonachi_logic(t : u64, mut  x : u64, mut  y : u64) -> u64  {
-    if t == 0  { 
-        return x ; 
-    }else if  t == 1  { 
-        return y ; 
-    } 
-    
-    else { 
-        for _ in 2..=t { 
-            let z: u64  = x + y ; 
-            x = y ;
-            y = z  ;
+fn fibonachi_logic(t: U256, mut x: U256, mut y: U256) -> U256 {
+    if t.is_zero() {
+        return x;
+    } else if t == U256::from(1) {
+        return y;
+    } else {
+        let mut i = U256::from(2);
+        while i <= t {
+            let z: U256 = x + y;
+            x = y;
+            y = z;
+            i += U256::from(1);
         }
-        return y  ; 
+        return y;
     }
-    // OR recursively
-    // fibonachi_logic(n-1 , y, y+x)
 }
