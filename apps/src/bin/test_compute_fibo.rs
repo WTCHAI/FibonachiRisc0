@@ -10,7 +10,12 @@ use hex;
 use tokio ; 
 
 use ethers::{abi::encode, prelude::{abigen, Address, Http, LocalWallet, Middleware, Provider, Signer, SignerMiddleware, TransactionRequest}};
-use ethers::types::U256 ; 
+use alloy_primitives::U256;
+
+use alloy::{
+    network::EthereumWallet, providers::ProviderBuilder, signers::local::PrivateKeySigner,
+    sol_types::SolValue,
+};
 
 #[tokio::main]
 async fn main() {
@@ -22,11 +27,9 @@ async fn main() {
     let receipt = bonsai_proof().await.expect("Failed to generating receipt") ;
     let journal = receipt.clone().journal ;
     let seal_snarks = encode_seal(&receipt).unwrap() ;
-    let public_output: U256 = U256::from_little_endian(&journal.bytes) ; 
+    let public_output = U256::abi_decode(&journal.bytes, true).unwrap() ;
 
     println!("Public output : {:?}", public_output) ; 
-    let decoded_journal: u32 = journal.clone().decode().unwrap(); // Replace `YourJournalType` with the actual type
-    println!("Seal snarks : {:?}",decoded_journal) ;
     println!("Seal snarks : {:?}",seal_snarks) ;
     println!("Journal (Hex): 0x{}", hex::encode(&journal));
     println!("Seal (Hex): 0x{}", hex::encode(&seal_snarks));
