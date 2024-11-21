@@ -19,7 +19,6 @@ pub fn normal_proof() -> Result<Receipt, Box<dyn std::error::Error>> {
         y : u64,
     }
     
-
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::filter::EnvFilter::from_default_env())
         .init();
