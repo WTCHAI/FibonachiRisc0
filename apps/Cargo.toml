@@ -17,6 +17,10 @@ risc0-zkvm = { workspace = true}
 risc0-ethereum-contracts = { workspace = true}
 bonsai-sdk = "1.1.3"
 
+alloy = { workspace = true }
+alloy-primitives ={ workspace = true }
+alloy-sol-types = { workspace = true }
+
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 methods = { workspace = true }
 ethers = { version = "2.0.14" }
@@ -28,4 +32,6 @@ serde_json = { workspace = true }
 sha2 = {workspace = true}
 anyhow = {workspace = true}
 hex = {workspace = true}
+
+
 
