@@ -1,13 +1,23 @@
 
-use ethers::{abi::Bytes, types::{Address , U256} };
+use ethers::{abi::Bytes, types::Address };
 use risc0_zkvm::{sha::Digestible , Receipt};
 
+use alloy_primitives::U256;
+
 use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FrontPayloadRequest {
+    pub times : u128,
+    pub x: u128,
+    pub y: u128,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadRequest {
-    pub times : u32,
-    pub x: u32,
-    pub y: u32,
+    pub times : U256,
+    pub x: U256,
+    pub y: U256,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PayloadResponse { 
@@ -39,7 +49,7 @@ pub fn print_receipt_properties(receipt: &Receipt) {
     println!("Seal as bytes to vec : {:?}",seal.as_bytes().to_vec()) ;
     println!("Seal as bytes to vec : {:?}",seal.as_bytes().to_vec().len()) ;
     let journal = receipt.journal.bytes.clone() ; 
-    let public_output = U256::from_big_endian(&journal) ; //receipt.journal.decode().unwrap() ; 
+    // let public_output = U256::from_big_endian(&journal) ; //receipt.journal.decode().unwrap() ; 
     // Journal maximum uint64 cause computed bytes 8
     println!("public output after decode  : {:?}",public_output) ; 
     println!("Journal : {:?}",journal) ; 
