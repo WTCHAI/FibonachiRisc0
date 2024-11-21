@@ -10,6 +10,8 @@ contract FibonachiVerifier {
     bytes32 public constant imageId = ImageID.FINALIZE_FIBONACHI_ID;
     uint256 public correct_public_output ;
 
+    event ChallengeLog(address indexed challenger, bool isCorrect);
+
     mapping (address => bool ) IsProverCorrect ;
 
     constructor(IRiscZeroVerifier _verifier , uint256 correct_public_output_) {
@@ -22,12 +24,12 @@ contract FibonachiVerifier {
         bytes memory seal
     ) public {
         bytes memory journal = abi.encode(fibo_result);
-        require(fibo_result == correct_public_output,"Public output mismatch!") ; 
         address challengerAddr = msg.sender;
-
         try verifier.verify(seal, imageId, sha256(journal)) {
-            IsProverCorrect[challengerAddr] = true;
+            emit ChallengeLog(challengerAddr, true);
+            IsProverCorrect[challengerAddr] = (fibo_result == correct_public_output);
         } catch {
+            emit ChallengeLog(challengerAddr, false);
             IsProverCorrect[challengerAddr] = false;
         }   
     }

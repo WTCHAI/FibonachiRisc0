@@ -29,7 +29,7 @@ async fn main() -> Result<()> {
         env::var("ALCHEMY_API_KEY").unwrap()
     );
 
-    let private_key = env::var("PRIVATE_KEY").expect("PRIVATE_KEY must be set") ;
+    let private_key = env::var("PRIVATE_KEY_2").expect("PRIVATE_KEY must be set") ;
     let signer = PrivateKeySigner::from_str(&private_key).expect("require creting private key signer") ; 
     let wallet = EthereumWallet::from(signer);
 
@@ -44,7 +44,7 @@ async fn main() -> Result<()> {
     let seal_snarks = encode_seal(&receipt).expect("Failed to encode seal");
     let computed_output = U256::abi_decode(&journal.bytes, true).unwrap() ;
 
-    let fibonachi_verifier_contract_address: Address ="0x5036Ec86D742098D5f5cf5853094ee1AF37343d8".parse()?;
+    let fibonachi_verifier_contract_address: Address ="0x4bE39ec6c925954A5Bc95A830814821Ab0E6761D".parse()?;
     let contract = IFibonachiVerifier::new(fibonachi_verifier_contract_address, provider.clone());
     
     let challenge_call = contract.challenge(

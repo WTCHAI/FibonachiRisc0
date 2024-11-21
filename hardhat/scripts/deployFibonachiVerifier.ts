@@ -33,5 +33,5 @@ async function Deployer(contractName:string){
 // npx hardhat run scripts/deployFibonachiVerifier.ts --network holesky
 // contract address : 0xF9CB9306C7158978b18BbEfDFfa98852535bd5A4
 
-// Contract address sepolia : 0x5036Ec86D742098D5f5cf5853094ee1AF37343d8
+// Contract address sepolia : 0x4bE39ec6c925954A5Bc95A830814821Ab0E6761D
 Deployer("FibonachiVerifier");
