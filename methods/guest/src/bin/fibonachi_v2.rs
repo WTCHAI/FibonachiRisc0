@@ -4,11 +4,14 @@ use risc0_zkvm::guest::env;
 use serde::{Deserialize, Serialize};
 use serde_json::{Result as JsonResult, Value};
 
+use alloy_primitives::U256;
+use alloy_sol_types::SolValue;
+
 #[derive(Serialize, Deserialize, Debug)]
 struct Payload {
-    times: u32,
-    x: u32,
-    y: u32,
+    times: U256,
+    x: U256,
+    y: U256,
 }
 
 fn main() {
@@ -23,29 +26,23 @@ fn main() {
 
     let payload_result: JsonResult<Payload> = serde_json::from_slice(&filtered_bytes[1..]);
 
-    match payload_result {
-        Ok(payload) => {
-            let result = fibonachi_logic(payload.times, payload.x, payload.y);
-            env::commit(&result);
-        }
-        Err(e) => {
-            println!("Error deserializing JSON payload: {:?}", e);
-            let error_code = -1;
-            env::commit(&error_code);
-        }
-    }
+    let data = payload_result.unwrap();
+    let result = fibonachi_logic(data.times, data.x, data.y);
+    env::commit_slice(&result.abi_encode().as_slice());
 }
 
-fn fibonachi_logic(t: u32, mut x: u32, mut y: u32) -> u32 {
-    if t == 0 {
+fn fibonachi_logic(t: U256, mut x: U256, mut y: U256) -> U256 {
+    if t.is_zero() {
         return x;
-    } else if t == 1 {
+    } else if t == U256::from(1) {
         return y;
     } else {
-        for _ in 2..=t {
-            let z: u32 = x + y;
+        let mut i = U256::from(2);
+        while i <= t {
+            let z: U256 = x + y;
             x = y;
             y = z;
+            i += U256::from(1);
         }
         return y;
     }
